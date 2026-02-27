@@ -19,7 +19,12 @@ class EnsureUser
 
         $user = User::firstOrCreate(
             ['email' => 'kullanici@tirtek.com'],
-            ['name' => 'Kullanıcı', 'password' => Hash::make('sifre123')]
+            [
+                'first_name' => 'Kullanıcı',
+                'last_name' => '',
+                'name' => 'Kullanıcı',
+                'password' => Hash::make('sifre123')
+            ]
         );
 
         Auth::login($user);
