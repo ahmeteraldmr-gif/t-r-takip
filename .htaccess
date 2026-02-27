@@ -1,16 +1,17 @@
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
-        Options -MultiViews -Indices
+        Options -MultiViews -Indexes
     </IfModule>
 
     RewriteEngine On
 
-    # Sondaki eğik çizgiyi (slash) yönet
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)/$ /$1 [L,R=301]
+    # Eğer istek public klasörüne yapılmıyorsa, public klasörüne yönlendir
+    RewriteCond %{REQUEST_URI} !^/t-r-takip/public/
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
 
-    # Dosya veya klasör yoksa index.php'ye gönder
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^ index.php [L]
+    # Güvenlik: .env ve yapılandırma dosyalarına doğrudan erişimi engelle
+    RewriteRule ^\.env - [F,L,NC]
+    RewriteRule ^composer\.(json|lock)$ - [F,L,NC]
+    RewriteRule ^package(-lock)?\.json$ - [F,L,NC]
 </IfModule>
